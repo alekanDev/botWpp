@@ -1,14 +1,24 @@
 const express = require('express')
 const router = express.Router()
-const { sendMessage } = require('../src/botWpp')
+const { sendMessage, sendMedia } = require('../src/botWpp')
 
-router.post('/send', (req, res) => {
-    const { message, to } = req.body
+const newNumber = (to) => {
     const newNumber = `${to}@c.us`
-    console.log(`para ${newNumber}: ${message}`)
+    return newNumber
+}
 
-    sendMessage(newNumber, message)
-    res.send({State: 'Enviado'})
+router.post('/sendMessage', (req, res) => {
+    const { to, message } = req.body
+
+    sendMessage(newNumber(to), message)
+    res.send({ State: 'Enviado' })
+})
+
+router.post('/sendMedia', (req, res) => {
+    const {to, fileName} = req.body
+
+    sendMedia(newNumber(to), fileName)
+    res.send({state: 'Media ok'})
 })
 
 

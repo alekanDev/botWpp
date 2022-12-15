@@ -1,4 +1,4 @@
-const { Client, LocalAuth } = require('whatsapp-web.js')
+const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js')
 const qrcode = require('qrcode-terminal')
 
 // Servidor api
@@ -46,6 +46,17 @@ const initSession = () => {
     client.initialize()
 }
 
+const sendMessage = (to, message) => {
+    client.sendMessage(to, message)
+    console.log(`para ${to}: ${message}`)
+}
+
+const sendMedia = (to, file) => {
+    const mediaFile = MessageMedia.fromFilePath(`./mediaSend/${file}`)
+    client.sendMessage(to, mediaFile)
+}
+
+
 const listenMessages = () => {
     client.on('message', (msg) => {
         const { from, to, body } = msg
@@ -54,15 +65,21 @@ const listenMessages = () => {
         switch(body){
             case 'Test':
                 sendMessage(from, 'Respuesta a Test')
+                break
+            case 'Info':
+                sendMessage(from, 'test media')
+                sendMedia(from, 'constitucion.pdf')
+                break
         }
     })
+    
+    // client.on('message', async msg => {
+    //     if(msg.hasMedia) {
+    //         const media = await msg.downloadMedia()
+    //     }
+    // })
 }
 
-const sendMessage = (to, message) => {
-    client.sendMessage(to, message)
-    console.log(`para ${to}: ${message}`)
-}
 
 
-
-module.exports = initSession
+module.exports = { initSession, sendMessage, sendMedia }
