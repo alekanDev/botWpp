@@ -1,28 +1,12 @@
 const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js')
 const qrcode = require('qrcode-terminal')
+const moment = require('moment')
+const mongoose = require('mongoose')
+const fetch = require('node-fetch')
 
-// Servidor api
-// const express = require('express')
-// const cors = require('cors')
-// const app = express()
-
-// app.listen(9090, () => {
-//     console.log('server in port 9090')
-// })
-
-// app.use(cors())
-// app.use(express.urlencoded({ extended: true }))
-
-// app.post('/send', (req, res) => {
-//     const { message, to } = req.body
-//     const newNumber = `${to}@c.us`
-//     console.log(`para ${newNumber}: ${message}`)
-
-//     sendMessage(newNumber, message)
-//     res.send({State: 'Enviado'})
-// })
-
-// Final del Servidor api
+const date = moment().format('MMMM Do YYYY')
+const hour = moment().format('HH:mm:ss')
+const PATH_CHATS = './chats'
 
 let client
 
@@ -46,9 +30,10 @@ const initSession = () => {
     client.initialize()
 }
 
-const sendMessage = (to, message) => {
+const sendMessage = (to, message) => {    
     client.sendMessage(to, message)
-    console.log(`para ${to}: ${message}`)
+
+    console.log(`${ to } [${ hour }]: ${ message }`)
 }
 
 const sendMedia = (to, file) => {
@@ -56,30 +41,29 @@ const sendMedia = (to, file) => {
     client.sendMessage(to, mediaFile)
 }
 
+const listenDB = (to, message) => {
+    fetch('localhost:9001/sendMessage', {
+        method: 'POST',
+        body: {"to": to, "message": message}
+    })
+}
 
 const listenMessages = () => {
     client.on('message', (msg) => {
         const { from, to, body } = msg
-        console.log(`de ${ from }: ${ body }`)
 
+        console.log(`${ to } [${ hour }]: ${ body }`)
+        listenDB(to, message)
+        
         switch(body){
             case 'Test':
                 sendMessage(from, 'Respuesta a Test')
                 break
             case 'Info':
-                sendMessage(from, 'test media')
                 sendMedia(from, 'constitucion.pdf')
                 break
         }
     })
-    
-    // client.on('message', async msg => {
-    //     if(msg.hasMedia) {
-    //         const media = await msg.downloadMedia()
-    //     }
-    // })
 }
-
-
 
 module.exports = { initSession, sendMessage, sendMedia }
