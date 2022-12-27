@@ -5,14 +5,18 @@ const chatSchema = mongoose.Schema({
     type: String,
     require: true
   },
+  state: {
+    type: String,
+    require: true
+  },
   // to: {
   //   type: String,
   //   require: true
   // },
-  // hour: {
-  //   type: String,
-  //   require: true
-  // },
+  hour: {
+    type: String,
+    require: true
+  },
   message: {
     type: String,
     require: true

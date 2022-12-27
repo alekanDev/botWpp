@@ -30,10 +30,9 @@ const initSession = () => {
     client.initialize()
 }
 
-const sendMessage = (to, message) => {    
+const sendMessage = (to, message, state) => {    
     client.sendMessage(to, message)
-
-    console.log(`${ to } [${ hour }]: ${ message }`)
+    console.log(`${state} ${ to } [${ hour }]: ${ message }`)
 }
 
 const sendMedia = (to, file) => {
@@ -41,19 +40,20 @@ const sendMedia = (to, file) => {
     client.sendMessage(to, mediaFile)
 }
 
-const listenDB = (to, message) => {
-    fetch('localhost:9001/sendMessage', {
-        method: 'POST',
-        body: {"to": to, "message": message}
-    })
-}
+// const listenDB = (to, state, message) => {
+//     fetch('localhost:9001/sendMessage', {
+//         method: 'POST',
+//         body: {"to": to, "message": message}
+//     })
+// }
 
 const listenMessages = () => {
     client.on('message', (msg) => {
         const { from, to, body } = msg
+        let state = 'from'
 
-        console.log(`${ to } [${ hour }]: ${ body }`)
-        listenDB(to, message)
+        console.log(`${state} ${ to } [${ hour }]: ${ body }`)
+        // listenDB(to, message, state)
         
         switch(body){
             case 'Test':
