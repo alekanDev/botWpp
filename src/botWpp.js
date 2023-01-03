@@ -32,7 +32,7 @@ const initSession = () => {
 
 const sendMessage = (to, message, state) => {    
     client.sendMessage(to, message)
-    console.log(`${state} ${ to } [${ hour }]: ${ message }`)
+    console.log(`${state} - ${ to } [${ hour }]: ${ message }`)
 }
 
 const sendMedia = (to, file) => {
