@@ -1,6 +1,0 @@
-December 18th 2022
-21:12:46 - Send: Message from postman
-21:12:46 - received: Info
-21:12:46 - Send: Media send(constitucion.pdf)
-21:12:46 - received: Test
-21:12:46 - Send: Respuesta a Test

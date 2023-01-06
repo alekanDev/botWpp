@@ -1,13 +1,13 @@
 const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
-const router = require('./routes/router')
-const {initSession} = require('./src/botWpp')
+const chatRoutes = require('./routes/chatRoutes')
+const { initSession } = require('./src/botWpp')
 const mongoose = require('mongoose')
 require('dotenv').config()
 
 const app = express()
-const PORT = process.env.PORT || 9001
+const PORT = process.env.PORT
 
 app.listen(PORT, () => {
     console.log(`server in port ${PORT}`)
@@ -18,7 +18,8 @@ app.use(express.json())
 // app.use(express.urlencoded({ extended: true }))
 
 app.use(morgan('dev'))
-app.use(router)
+app.use(chatRoutes)
+// app.use(routerContacts)
 
 //conexion a mongoDB
 
